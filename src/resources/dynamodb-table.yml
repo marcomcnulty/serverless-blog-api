@@ -1,0 +1,17 @@
+Resources:
+  PostsTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain # prevent resource from being deleted by CloudFormation
+    Properties:
+      TableName: ${self:provider.environment.POSTS_TABLE}
+      AttributeDefinitions:
+        - AttributeName: userId
+        - AttributeType: S
+        - AttributeName: postId
+        - AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: postId
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST # auto-scale with on-demand capacity
