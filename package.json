@@ -1,0 +1,27 @@
+{
+  "name": "udacity-capstone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "serverless-bundle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmman64/udacity-capstone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmman64/udacity-capstone/issues"
+  },
+  "homepage": "https://github.com/mmman64/udacity-capstone#readme",
+  "devDependencies": {
+    "aws-sdk": "^2.767.0",
+    "serverless-bundle": "^3.1.0"
+  },
+  "dependencies": {
+    "uuid": "^8.3.1"
+  }
+}
