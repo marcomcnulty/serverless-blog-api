@@ -10,9 +10,29 @@ plugins:
 package:
   individually: true
 
+# stage/region defaults set if not overridden when running serverless commands
 provider:
   name: aws
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-west-2'}
   profile: serverless-marco
+
+  environment:
+    POSTS_TABLE: ${self:provider.stage}-posts
+
+functions:
+  CreatePost:
+    handler: src/lambda/http/createPost.handler
+    events:
+      - http:
+          path: /posts
+          method: post
+          cors: true
+
+Resources:
+  - ${file(src/resources/api-gateway-errors.yml)} # API Gateway errors
+  - ${file(src/resources/dynamodb-table.yml)} # DynamoDB
+  - ${file(src/resources/s3-bucket.yml)} # S3
+  - ${file(src/resources/cognito-user-pool.yml)} # Cognito User Pool
+  - ${file(src/resources/cognito-identity-pool.yml)} # Cognito Identity Pool
