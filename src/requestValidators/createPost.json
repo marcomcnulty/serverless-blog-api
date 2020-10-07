@@ -1,0 +1,24 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "Create Post Schema",
+  "required": ["title", "content"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9]+$"
+    },
+    "content": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9]+$"
+    }
+  },
+  "additionalProperties": {
+    "properties": {
+      "coverUrl": {
+        "type": "string"
+      }
+    }
+  }
+}

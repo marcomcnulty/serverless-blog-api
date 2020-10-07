@@ -22,6 +22,9 @@ provider:
     POSTS_TABLE: ${self:provider.stage}-posts
 
 functions:
+  Auth:
+    handler: src/lambda/auth/auth0Authorizer.handler
+
   CreatePost:
     handler: src/lambda/http/createPost.handler
     events:
@@ -29,6 +32,10 @@ functions:
           path: /posts
           method: post
           cors: true
+          authorizer: Auth
+          request:
+            schema:
+              application/json: ${file(src/requestValidators/createPost.json)}
 
 Resources:
   - ${file(src/resources/api-gateway-errors.yml)} # API Gateway errors

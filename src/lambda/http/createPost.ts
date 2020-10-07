@@ -17,6 +17,7 @@ export const handler = async event => {
       postId: uuid.v4(),
       title: data.title,
       content: data.content,
+      coverUrl: data.coverUrl,
       createdAt: new Date().toISOString(),
     },
   };
