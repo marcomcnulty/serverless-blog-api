@@ -21,6 +21,15 @@ provider:
   environment:
     POSTS_TABLE: ${self:provider.stage}-posts
 
+functions:
+  CreatePost:
+    handler: src/lambda/http/createPost.handler
+    events:
+      - http:
+          path: /posts
+          method: post
+          cors: true
+
 Resources:
   - ${file(src/resources/api-gateway-errors.yml)} # API Gateway errors
   - ${file(src/resources/dynamodb-table.yml)} # DynamoDB
