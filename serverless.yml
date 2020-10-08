@@ -7,6 +7,7 @@ plugins:
   - serverless-dotenv-plugin # load .env as environment variables
   - serverless-bundle # add es6/Typescript support see https://github.com/AnomalyInnovations/serverless-bundle
 
+# referring to functions - gives more control for optimised deployments
 package:
   individually: true
 
@@ -42,4 +43,3 @@ Resources:
   - ${file(src/resources/dynamodb-table.yml)} # DynamoDB
   - ${file(src/resources/s3-bucket.yml)} # S3
   - ${file(src/resources/cognito-user-pool.yml)} # Cognito User Pool
-  - ${file(src/resources/cognito-identity-pool.yml)} # Cognito Identity Pool
