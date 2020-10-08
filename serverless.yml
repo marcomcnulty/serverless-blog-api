@@ -42,4 +42,3 @@ Resources:
   - ${file(src/resources/api-gateway-errors.yml)} # API Gateway errors
   - ${file(src/resources/dynamodb-table.yml)} # DynamoDB
   - ${file(src/resources/s3-bucket.yml)} # S3
-  - ${file(src/resources/cognito-user-pool.yml)} # Cognito User Pool
