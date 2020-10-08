@@ -21,6 +21,7 @@ provider:
 
   environment:
     POSTS_TABLE: ${self:provider.stage}-posts
+    PROFILES_TABLE: ${self:provider.stage}-profiles
 
 functions:
   Auth:
@@ -40,5 +41,6 @@ functions:
 
 Resources:
   - ${file(src/resources/api-gateway-errors.yml)} # API Gateway errors
-  - ${file(src/resources/dynamodb-table.yml)} # DynamoDB
+  - ${file(src/resources/dynamodb-posts-table.yml)} # DynamoDB-Posts
+  - ${file(src/resources/dynamodb-profiles-table.yml)} # DynamoDB-Profiles
   - ${file(src/resources/s3-bucket.yml)} # S3
