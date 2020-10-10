@@ -12,8 +12,7 @@ export const handler = async event => {
   const params = {
     TableName: process.env.POSTS_TABLE,
     Item: {
-      // Cognito Identity Pool identity id
-      userId: event.requestContext.identity.cognitoIdentityId,
+      userId: event.userId,
       postId: uuid.v4(),
       title: data.title,
       content: data.content,
