@@ -1,9 +1,11 @@
 service: udacity-capstone-api
-app: udacity-serverless-blog
+app:
 
 plugins:
   # add es6/Typescript support see https://github.com/AnomalyInnovations/serverless-bundle
   - serverless-bundle
+  # define iam permissions at function level
+  - serverless-iam-roles-per-function
 
 # referring to functions - gives more control for optimised deployments
 package:
@@ -18,6 +20,7 @@ provider:
   profile: serverless-marco
 
   environment:
+    APP_NAME: udacity-serverless-blog
     POSTS_TABLE: ${self:provider.stage}-posts
     PROFILES_TABLE: ${self:provider.stage}-profiles
 
@@ -36,6 +39,13 @@ functions:
           request:
             schema:
               application/json: ${file(src/requestValidators/createPost.json)}
+    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-create-post-role-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}
+
 resources:
   # API Gateway errors
   - ${file(src/resources/api-gateway-errors.yml)}

@@ -3,7 +3,7 @@ import {
   APIGatewayAuthorizerResult,
 } from 'aws-lambda';
 import { verify, decode } from 'jsonwebtoken';
-import Axios from 'axios';
+import axios from 'Axios';
 import { iJwt } from '../../types/jwtTypes/iJwt';
 import { iJwtPayload } from '../../types/jwtTypes/iJwtPayload';
 
@@ -66,7 +66,7 @@ async function verifyToken(authHeader: string): Promise<iJwtPayload> {
 
   try {
     // get public keys used to verify auth0 RS256 signature
-    const jwksRes = await Axios.get(jwksUrl, reqHeaders);
+    const jwksRes = await axios.get(jwksUrl, reqHeaders);
     const jwks = jwksRes.data.keys;
 
     // parse and return JWT payload
