@@ -2,10 +2,8 @@ service: udacity-capstone
 app: udacity-serverless-blog
 
 plugins:
-  - serverless-bundle # package functions with Webpack
-  - serverless-offline # offline testing
-  - serverless-dotenv-plugin # load .env as environment variables
-  - serverless-bundle # add es6/Typescript support see https://github.com/AnomalyInnovations/serverless-bundle
+  # add es6/Typescript support see https://github.com/AnomalyInnovations/serverless-bundle
+  - serverless-bundle
 
 # referring to functions - gives more control for optimised deployments
 package:
@@ -40,7 +38,11 @@ functions:
               application/json: ${file(src/requestValidators/createPost.json)}
 
 Resources:
-  - ${file(src/resources/api-gateway-errors.yml)} # API Gateway errors
-  - ${file(src/resources/dynamodb-posts-table.yml)} # DynamoDB-Posts
-  - ${file(src/resources/dynamodb-profiles-table.yml)} # DynamoDB-Profiles
-  - ${file(src/resources/s3-bucket.yml)} # S3
+  # API Gateway errors
+  - ${file(src/resources/api-gateway-errors.yml)}
+  # DynamoDB-Posts
+  - ${file(src/resources/dynamodb-posts-table.yml)}
+  # DynamoDB-Profiles
+  - ${file(src/resources/dynamodb-profiles-table.yml)}
+  # S3 - monolithic bucket will do for demo purposes
+  - ${file(src/resources/s3-bucket.yml)}
