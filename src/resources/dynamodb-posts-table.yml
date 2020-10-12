@@ -6,9 +6,9 @@ Resources:
       TableName: ${self:provider.environment.POSTS_TABLE}
       AttributeDefinitions:
         - AttributeName: userId
-        - AttributeType: S
+          AttributeType: S
         - AttributeName: postId
-        - AttributeType: S
+          AttributeType: S
       KeySchema:
         - AttributeName: userId
           KeyType: HASH

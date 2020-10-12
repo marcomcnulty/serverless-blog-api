@@ -3,10 +3,10 @@ Resources:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain # prevent resource from being deleted by CloudFormation
     Properties:
-      TableName: ${self:provider.environment.POSTS_TABLE}
+      TableName: ${self:provider.environment.PROFILES_TABLE}
       AttributeDefinitions:
         - AttributeName: userId
-        - AttributeType: S
+          AttributeType: S
       KeySchema:
         - AttributeName: userId
           KeyType: HASH

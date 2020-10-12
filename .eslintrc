@@ -1,0 +1,15 @@
+{
+  "extends": "strongloop",
+  "rules": {
+    "no-console": 0,
+    "no-use-before-define": 0,
+    "no-undef": 0,
+    "max-len": 0,
+    "space-before-function-paren": 0,
+    "@typescript-eslint/class-name-casing": 0,
+    "@typescript-eslint/no-use-before-define": [
+      "error",
+      { "functions": false, "classes": true }
+    ]
+  }
+}

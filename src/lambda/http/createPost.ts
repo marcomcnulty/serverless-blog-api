@@ -1,22 +1,30 @@
+import {
+  APIGatewayProxyEvent,
+  APIGatewayProxyHandler,
+  APIGatewayProxyResult,
+} from 'aws-lambda';
 import * as uuid from 'uuid';
 import * as AWS from 'aws-sdk';
+import { iCreatePostRequest } from '../../types/requestTypes/iCreatePostRequest';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-export const handler = async event => {
+export const handler: APIGatewayProxyHandler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
   console.log(`Processing event: ${event}`);
 
-  const data = JSON.parse(event.body);
-  console.log(`New post: ${data}`);
+  const newPost: iCreatePostRequest = JSON.parse(event.body);
+  console.log(`New post: ${newPost}`);
 
   const params = {
     TableName: process.env.POSTS_TABLE,
     Item: {
-      userId: event.userId,
+      userId: newPost.userId,
       postId: uuid.v4(),
-      title: data.title,
-      content: data.content,
-      coverUrl: data.coverUrl,
+      title: newPost.title,
+      content: newPost.content,
+      coverUrl: newPost.coverUrl,
       createdAt: new Date().toISOString(),
     },
   };
