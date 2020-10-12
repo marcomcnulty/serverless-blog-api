@@ -1,17 +1,26 @@
+import {
+  APIGatewayTokenAuthorizerEvent,
+  APIGatewayAuthorizerResult,
+} from 'aws-lambda';
 import { verify, decode } from 'jsonwebtoken';
 import Axios from 'axios';
+import { iJwt } from '../../types/jwtTypes/iJwt';
+import { iJwtPayload } from '../../types/jwtTypes/iJwtPayload';
 
 // endpoint for JWK used to sign JWT for this tenant
 const jwksUrl = 'https://dev-f8ud0irk.eu.auth0.com/.well-known/jwks.json';
 
-export const handler = async event => {
+export const handler = async (
+  event: APIGatewayTokenAuthorizerEvent
+): Promise<APIGatewayAuthorizerResult> => {
   console.log(`Processing Auth Event: ${event}`);
 
   try {
-    const jwtToken = await verifyToken(event.authorizationToken);
+    const jwtPayload: iJwtPayload = await verifyToken(event.authorizationToken);
 
     return {
-      principalId: jwtToken.sub, // sub refers to subject - unique identifier
+      // sub refers to subject - unique identifier
+      principalId: jwtPayload.sub,
       policyDocument: {
         Version: '2012-10-17',
         Statement: [
@@ -27,7 +36,8 @@ export const handler = async event => {
     alert(`User not authorised! Error: ${err.message}`);
 
     return {
-      principalId: 'user', // arbitrary value
+      // arbitrary value
+      principalId: 'user',
       policyDocument: {
         Version: '2012-10-17',
         Statement: [
@@ -42,7 +52,7 @@ export const handler = async event => {
   }
 };
 
-async function verifyToken(authHeader) {
+async function verifyToken(authHeader: string): Promise<iJwtPayload> {
   const reqHeaders = {
     headers: {
       'Content-Type': 'application/json',
@@ -60,19 +70,19 @@ async function verifyToken(authHeader) {
     const jwks = jwksRes.data.keys;
 
     // parse and return JWT payload
-    const decodedJwt = decode(token, { complete: true });
-    const publicKey = getPublicKey(jwks, decodedJwt);
+    const decodedToken: iJwt = decode(token, { complete: true }) as iJwt;
+    const publicKey = getPublicKey(jwks, decodedToken);
 
     return verify(token, publicKey, {
       algorithms: ['RS256'],
-    });
+    }) as iJwtPayload;
   } catch (err) {
     console.log(`Error: ${err}`);
     throw new Error(`Something went wrong: ${err.message}`);
   }
 }
 
-function getToken(authHeader) {
+function getToken(authHeader: string): string {
   if (!authHeader) {
     console.log('No authentication header');
     throw new Error('No authentication header');
@@ -84,12 +94,15 @@ function getToken(authHeader) {
   }
   console.log('Authentication Header is valid!');
 
+  // separates the token from 'Bearer'
   return authHeader.split(' ')[1];
 }
 
 function getPublicKey(jwks, jwt) {
-  // filter out keys not intended for verifying JWT and
-  // keys missing kid or public key property
+  /*
+   * filter out keys not intended for verifying JWT and
+   * keys missing kid or public key property
+   */
   const keys = jwks
     .filter(
       key =>
