@@ -46,3 +46,7 @@ Resources:
   - ${file(src/resources/dynamodb-profiles-table.yml)}
   # S3 - monolithic bucket will do for demo purposes
   - ${file(src/resources/s3-bucket.yml)}
+
+custom:
+  bundle:
+    linting: true
