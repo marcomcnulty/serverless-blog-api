@@ -36,8 +36,7 @@ functions:
           request:
             schema:
               application/json: ${file(src/requestValidators/createPost.json)}
-
-Resources:
+resources:
   # API Gateway errors
   - ${file(src/resources/api-gateway-errors.yml)}
   # DynamoDB-Posts
