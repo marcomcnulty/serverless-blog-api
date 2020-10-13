@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2017"],
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "target": "es2017",
+    "module": "CommonJS",
     "outDir": "lib"
   },
   "exclude": ["node_modules"]

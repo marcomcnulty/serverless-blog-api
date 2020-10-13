@@ -1,7 +1,7 @@
 Resources:
   ProfilesTable:
     Type: AWS::DynamoDB::Table
-    DeletionPolicy: Retain # prevent resource from being deleted by CloudFormation
+    # DeletionPolicy: Retain # prevent resource from being deleted by CloudFormation
     Properties:
       TableName: ${self:provider.environment.PROFILES_TABLE}
       AttributeDefinitions:

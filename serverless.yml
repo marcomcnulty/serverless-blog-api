@@ -1,9 +1,7 @@
 service: udacity-capstone-api
-app:
+app: udacity-serverless-blog
 
 plugins:
-  # add es6/Typescript support see https://github.com/AnomalyInnovations/serverless-bundle
-  - serverless-bundle
   # define iam permissions at function level
   - serverless-iam-roles-per-function
 
@@ -55,17 +53,3 @@ resources:
   - ${file(src/resources/dynamodb-profiles-table.yml)}
   # S3 - monolithic bucket will do for demo purposes
   - ${file(src/resources/s3-bucket.yml)}
-
-resources:
-  # API Gateway errors
-  - ${file(src/resources/api-gateway-errors.yml)}
-    # DynamoDB-Posts
-  - ${file(src/resources/dynamodb-posts-table.yml)}
-    # DynamoDB-Profiles
-  - ${file(src/resources/dynamodb-profiles-table.yml)}
-    # S3
-  - ${file(src/resources/s3-bucket.yml)}
-
-custom:
-  bundle:
-    linting: true

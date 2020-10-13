@@ -12,10 +12,10 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  console.log(`Processing event: ${event}`);
+  console.log(`Processing event: ${JSON.stringify(event)}`);
 
   const newPost: iCreatePostRequest = JSON.parse(event.body);
-  console.log(`New post: ${newPost}`);
+  console.log(`New post: ${JSON.stringify(newPost)}`);
 
   const params = {
     TableName: process.env.POSTS_TABLE,
@@ -47,7 +47,7 @@ export const handler: APIGatewayProxyHandler = async (
       body: JSON.stringify(params.Item),
     };
   } catch (err) {
-    alert(`Error: ${err}`);
+    console.log(err);
 
     return {
       statusCode: 500,

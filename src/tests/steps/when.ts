@@ -1,11 +1,12 @@
 import axios from 'Axios';
-import _ from 'lodash';
+import * as _ from 'lodash';
 
-const APP_ROOT = '../../../';
+const APP_ROOT = '../../';
+// http for acceptance test, handler for integration test
 const mode = process.env.TEST_MODE;
 
 const weInvokeCreatePost = async (user, post) => {
-  // set the userId from the user info
+  // set the userId for post
   post['userId'] = user.userId;
 
   const body = JSON.stringify(post);
@@ -20,6 +21,7 @@ const weInvokeCreatePost = async (user, post) => {
 };
 
 const viaHttp = async (relPath, method, opts) => {
+  // AWS root url for service
   const root = process.env.TEST_ROOT;
   const url = `${root}/${relPath}`;
   console.log(`invoking via HTTP ${method} ${url}`);
@@ -30,18 +32,16 @@ const viaHttp = async (relPath, method, opts) => {
       url,
     };
 
-    // when making a post request
+    // for post requests
     if (opts.body) {
-      config['data'] = body;
+      config['data'] = opts.body;
     }
 
-    if (user.token) {
-      const headers = { Authorization: `Bearer ${user.token}` };
+    const { auth } = opts;
 
-      config = {
-        ...config,
-        headers,
-      };
+    if (auth.token) {
+      const headers = { Authorization: `Bearer ${auth.token}` };
+      config['headers'] = { headers };
     }
 
     const res = await axios(config);
@@ -51,7 +51,6 @@ const viaHttp = async (relPath, method, opts) => {
       headers: res.headers,
       body: res.data,
     };
-
   } catch (err) {
     if (err.status) {
       return {
@@ -65,16 +64,12 @@ const viaHttp = async (relPath, method, opts) => {
 };
 
 const viaHandler = async (event, fnName) => {
-  const handler = require(`${APP_ROOT}/lambda/${fnName}`).handler;
+  const { handler } = await import(`${APP_ROOT}lambda/http/${fnName}.ts`);
   console.log(`invoking via handler function ${fnName}`);
 
   const context = {};
   const res = await handler(event, context);
-  const contentType = _.get(
-    res,
-    'headers.content-type',
-    'application/json'
-  );
+  const contentType = _.get(res, 'headers.content-type', 'application/json');
 
   if (res.body && contentType === 'application/json') {
     res.body = JSON.parse(res.body);

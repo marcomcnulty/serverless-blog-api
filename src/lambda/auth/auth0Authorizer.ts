@@ -13,7 +13,7 @@ const jwksUrl = 'https://dev-f8ud0irk.eu.auth0.com/.well-known/jwks.json';
 export const handler = async (
   event: APIGatewayTokenAuthorizerEvent
 ): Promise<APIGatewayAuthorizerResult> => {
-  console.log(`Processing Auth Event: ${event}`);
+  console.log(`Processing Auth Event: ${JSON.stringify(event)}`);
 
   try {
     const jwtPayload: iJwtPayload = await verifyToken(event.authorizationToken);
@@ -33,7 +33,7 @@ export const handler = async (
       },
     };
   } catch (err) {
-    alert(`User not authorised! Error: ${err.message}`);
+    console.log(`User not authorised! Error: ${err.message}`);
 
     return {
       // arbitrary value
@@ -68,7 +68,6 @@ async function verifyToken(authHeader: string): Promise<iJwtPayload> {
     // get public keys used to verify auth0 RS256 signature
     const jwksRes = await axios.get(jwksUrl, reqHeaders);
     const jwks = jwksRes.data.keys;
-
     // parse and return JWT payload
     const decodedToken: iJwt = decode(token, { complete: true }) as iJwt;
     const publicKey = getPublicKey(jwks, decodedToken);
@@ -77,19 +76,16 @@ async function verifyToken(authHeader: string): Promise<iJwtPayload> {
       algorithms: ['RS256'],
     }) as iJwtPayload;
   } catch (err) {
-    console.log(`Error: ${err}`);
     throw new Error(`Something went wrong: ${err.message}`);
   }
 }
 
 function getToken(authHeader: string): string {
   if (!authHeader) {
-    console.log('No authentication header');
     throw new Error('No authentication header');
   }
 
   if (!authHeader.toLowerCase().startsWith('bearer ')) {
-    console.log('Invalid authentication header');
     throw new Error('Invalid authentication header');
   }
   console.log('Authentication Header is valid!');
@@ -121,7 +117,6 @@ function getPublicKey(jwks, jwt) {
   const signingKey = keys.find(key => key.kid === jwt.header.kid);
 
   if (!signingKey) {
-    console.log('No signing key found');
     throw new Error('No signing key found');
   }
   console.log('Signing key found! ', signingKey);
