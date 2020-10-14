@@ -15,14 +15,14 @@ describe('Given an authenticated user', async () => {
   });
 
   describe('When we invoke the POST /posts endpoint', async () => {
-    it('Should return 201 status', async () => {
+    it('Should return 200 status', async () => {
       const res = await when.weInvokeCreatePost(user, {
         postId: uuid.v4(),
         title: 'Test Title',
         content: 'This is the content of the blog post',
       });
 
-      expect(res.statusCode).to.equal(201);
+      expect(res.statusCode).to.equal(200);
     });
   });
 });

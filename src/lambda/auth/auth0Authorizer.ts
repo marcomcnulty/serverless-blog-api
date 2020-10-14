@@ -69,7 +69,9 @@ async function verifyToken(authHeader: string): Promise<iJwtPayload> {
     const jwksRes = await axios.get(jwksUrl, reqHeaders);
     const jwks = jwksRes.data.keys;
     // parse and return JWT payload
-    const decodedToken: iJwt = decode(token, { complete: true }) as iJwt;
+    const decodedToken: iJwt = decode(token, {
+      complete: true,
+    }) as iJwt;
     const publicKey = getPublicKey(jwks, decodedToken);
 
     return verify(token, publicKey, {
@@ -94,7 +96,7 @@ function getToken(authHeader: string): string {
   return authHeader.split(' ')[1];
 }
 
-function getPublicKey(jwks, jwt) {
+function getPublicKey(jwks: any, jwt: iJwt) {
   /*
    * filter out keys not intended for verifying JWT and
    * keys missing kid or public key property

@@ -1,58 +1,44 @@
+import lambdaHandler from '../../libs/lambdaHandler_lib';
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyHandler,
   APIGatewayProxyResult,
 } from 'aws-lambda';
-import * as uuid from 'uuid';
-import * as AWS from 'aws-sdk';
 import { iCreatePostRequest } from '../../types/requestTypes/iCreatePostRequest';
+import { createPost } from '../../businessLogic/posts';
 
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
+export const handler: APIGatewayProxyHandler = lambdaHandler(
+  async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    console.log('Processing create post event!');
 
-export const handler: APIGatewayProxyHandler = async (
-  event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResult> => {
-  console.log(`Processing event: ${JSON.stringify(event)}`);
+    const data: iCreatePostRequest = JSON.parse(event.body);
+    console.log(`New post: ${JSON.stringify(data)}`);
 
-  const newPost: iCreatePostRequest = JSON.parse(event.body);
-  console.log(`New post: ${JSON.stringify(newPost)}`);
-
-  const params = {
-    TableName: process.env.POSTS_TABLE,
-    Item: {
-      userId: newPost.userId,
-      postId: uuid.v4(),
-      title: newPost.title,
-      content: newPost.content,
-      coverUrl: newPost.coverUrl,
-      createdAt: new Date().toISOString(),
-    },
-  };
-
-  // response headers enabling CORS
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Credentials': true,
-  };
-
-  try {
-    await dynamoDb.put(params).promise();
-
-    return {
-      statusCode: 201,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-      body: JSON.stringify(params.Item),
+    // response headers enabling CORS
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
     };
-  } catch (err) {
-    console.log(err);
 
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ status: false }),
-    };
+    try {
+      const newPost = await createPost(data, event.headers);
+
+      return {
+        statusCode: 201,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+        },
+        body: JSON.stringify(newPost),
+      };
+    } catch (err) {
+      console.log(err);
+
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ status: false }),
+      };
+    }
   }
-};
+);

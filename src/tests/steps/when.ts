@@ -10,11 +10,12 @@ const weInvokeCreatePost = async (user, post) => {
   post['userId'] = user.userId;
 
   const body = JSON.stringify(post);
-  const auth = user.token;
+  // JWT string
+  const auth: string = user.token;
 
   const res =
     mode === 'handler'
-      ? await viaHandler({ body }, 'createPost')
+      ? await viaHandler({ body, auth }, 'createPost')
       : await viaHttp('posts', 'POST', { body, auth });
 
   return res;
@@ -42,6 +43,7 @@ const viaHttp = async (relPath, method, opts) => {
       reqOpts['headers'] = headers;
     }
 
+    // use fetch for body property that API Gateway expects
     const res = await fetch(url, reqOpts);
 
     return {
@@ -64,6 +66,10 @@ const viaHttp = async (relPath, method, opts) => {
 const viaHandler = async (event, fnName) => {
   const { handler } = await import(`${APP_ROOT}lambda/http/${fnName}.ts`);
   console.log(`invoking via handler function ${fnName}`);
+
+  event['headers'] = {
+    Authorization: `Bearer ${event.auth}`,
+  };
 
   const context = {};
   const res = await handler(event, context);
