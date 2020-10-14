@@ -4,6 +4,7 @@ app: udacity-serverless-blog
 plugins:
   # define iam permissions at function level
   - serverless-iam-roles-per-function
+  - serverless-webpack
 
 # referring to functions - gives more control for optimised deployments
 package:
@@ -13,6 +14,7 @@ package:
 provider:
   name: aws
   runtime: nodejs12.x
+  frameworkVersion: '2.1.1'
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-west-2'}
   profile: serverless-marco

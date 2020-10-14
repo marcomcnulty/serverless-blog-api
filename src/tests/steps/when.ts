@@ -1,5 +1,5 @@
-import axios from 'Axios';
 import * as _ from 'lodash';
+import fetch from 'node-fetch';
 
 const APP_ROOT = '../../';
 // http for acceptance test, handler for integration test
@@ -27,29 +27,27 @@ const viaHttp = async (relPath, method, opts) => {
   console.log(`invoking via HTTP ${method} ${url}`);
 
   try {
-    let config = {
-      method,
-      url,
-    };
-
+    const reqOpts = {};
+    reqOpts['method'] = method;
     // for post requests
     if (opts.body) {
-      config['data'] = opts.body;
+      reqOpts['body'] = opts.body;
     }
 
-    const { auth } = opts;
+    if (opts.auth) {
+      const headers: HeadersInit = {
+        Authorization: `Bearer ${opts.auth}`,
+      };
 
-    if (auth.token) {
-      const headers = { Authorization: `Bearer ${auth.token}` };
-      config['headers'] = { headers };
+      reqOpts['headers'] = headers;
     }
 
-    const res = await axios(config);
+    const res = await fetch(url, reqOpts);
 
     return {
       statusCode: res.status,
       headers: res.headers,
-      body: res.data,
+      body: res.body,
     };
   } catch (err) {
     if (err.status) {

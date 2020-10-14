@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "lib": ["es2017"],
-    "moduleResolution": "node",
+    "lib": ["ES2017", "DOM"],
+    "moduleResolution": "Node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "target": "es2017",
+    "target": "ES2017",
     "module": "CommonJS",
     "outDir": "lib"
   },
