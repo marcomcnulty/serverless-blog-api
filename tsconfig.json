@@ -3,8 +3,8 @@
     "baseUrl": ".",
     "lib": ["ES2017", "DOM"],
     "moduleResolution": "Node",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "target": "ES2017",
     "module": "CommonJS",
     "outDir": "lib"

@@ -13,15 +13,23 @@ describe('Given an authenticated user', async () => {
     user = await given.anAuthenticatedUser();
   });
 
-  describe('When we invoke the POST /posts endpoint', async () => {
-    it('Should Create a Post', async () => {
-      const res = await when.weInvokeCreatePost(user, {
+  describe('When we invoke the GET /posts/{userId}/{postId} endpoint', async () => {
+    it('Should return a post', async () => {
+      const createPostRes = await when.weInvokeCreatePost(user, {
         title: 'Test Title',
         content: 'This is the content of the blog post',
       });
 
-      expect(res.statusCode).to.equal(200);
-      expect(res.body).to.not.be.null;
+      const data = JSON.parse(createPostRes.body);
+
+      const getPostRes = await when.weInvokeGetPost(
+        data.userId,
+        data.postId,
+        user.token
+      );
+
+      expect(getPostRes.statusCode).to.equal(200);
+      expect(getPostRes.body).to.not.be.null;
     });
   });
 });

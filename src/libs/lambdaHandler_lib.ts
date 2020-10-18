@@ -1,6 +1,11 @@
-export default function lambdaHandler(lambda) {
-  return async function (event, context) {
-    let body, statusCode;
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+
+export const lambdaHandler = lambda => {
+  return async function (
+    event: APIGatewayProxyEvent,
+    context
+  ): Promise<APIGatewayProxyResult> {
+    let body: any, statusCode: number;
 
     try {
       body = await lambda(event, context);
@@ -13,10 +18,11 @@ export default function lambdaHandler(lambda) {
     return {
       statusCode,
       body: JSON.stringify(body),
+      // response headers enabling CORS
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },
     };
   };
-}
+};
