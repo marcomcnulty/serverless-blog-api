@@ -5,7 +5,7 @@ import { iPost } from '../../types/iPost';
 
 export const handler: APIGatewayProxyHandler = lambdaHandler(
   async (event: APIGatewayProxyEvent, context): Promise<iPost[]> => {
-    console.log('Processing get post event!');
+    console.log('Processing get posts event!');
 
     const userId = event.pathParameters.userId;
 

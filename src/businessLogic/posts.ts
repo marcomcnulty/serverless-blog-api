@@ -22,10 +22,7 @@ export const createPost = async (
 export const getPost = async (
   getPostRequest: iGetPostRequest
 ): Promise<iPost> => {
-  return await postsAccess.getPost(
-    getPostRequest.postId,
-    getPostRequest.userId
-  );
+  return await postsAccess.getPost({ ...getPostRequest });
 };
 
 export const getPosts = async (userId: string): Promise<iPost[]> => {
@@ -36,4 +33,9 @@ export const updatePost = async (
   updatePostRequest: iUpdatePostRequest
 ): Promise<iPost> => {
   return await postsAccess.updatePost({ ...updatePostRequest });
+};
+
+// TODO: type for deletePostRequest... how to merge GetPostRequest??
+export const deletePost = async (deletePostRequest): Promise<boolean> => {
+  return await postsAccess.deletePost({ ...deletePostRequest });
 };

@@ -123,6 +123,28 @@ functions:
         Resource:
           - '*'
 
+  DeletePost:
+    handler: src/lambda/http/deletePost.handler
+    events:
+      - http:
+          path: /posts/{userId}/{postId}
+          method: delete
+          cors: true
+          authorizer: Auth
+    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-get-post-role-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}
+      - Effect: Allow
+        Action:
+          - logs:CreateLogGroup
+          - logs:CreateLogStream
+          - logs:PutLogEvents
+        Resource:
+          - '*'
+
 custom:
   serverless-offline:
     port: 3003

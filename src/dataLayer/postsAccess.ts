@@ -1,6 +1,7 @@
 import dynamoDb from '../libs/dynamodb_lib';
 import { iPost } from './../types/iPost';
 import { iCreatePostRequest } from '../types/requestTypes/iCreatePostRequest';
+import { iGetPostRequest } from './../types/requestTypes/iGetPostRequest';
 import { iUpdatePostRequest } from '../types/requestTypes/iUpdatePostRequest';
 
 export class PostsAccess {
@@ -19,12 +20,12 @@ export class PostsAccess {
     return params.Item as iPost;
   }
 
-  async getPost(postId: string, userId: string): Promise<iPost> {
+  async getPost(getPostRequest: iGetPostRequest): Promise<iPost> {
     const params = {
       TableName: this.postsTable,
       Key: {
-        userId,
-        postId,
+        userId: getPostRequest.userId,
+        postId: getPostRequest.postId,
       },
     };
 
@@ -67,5 +68,19 @@ export class PostsAccess {
     const res = await dynamoDb.update(params);
 
     return res.Attributes as iPost;
+  }
+
+  async deletePost(deletePostRequest): Promise<any> {
+    const params = {
+      TableName: this.postsTable,
+      Key: {
+        userId: deletePostRequest.userId,
+        postId: deletePostRequest.postId,
+      },
+    };
+
+    await dynamoDb.delete(params);
+
+    return { status: true };
   }
 }
