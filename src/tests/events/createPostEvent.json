@@ -1,10 +1,8 @@
 {
-  "user": {
-    "userId": "1234",
-    "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik01RWtJUTJBV24tOWRoTzNRZGN2MSJ9.eyJpc3MiOiJodHRwczovL2Rldi1mOHVkMGlyay5ldS5hdXRoMC5jb20vIiwic3ViIjoicU9YM3lqNk5WZXdmMTdCOEcyTDhkWGlMWTBROVAydmNAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vbXktYXBpLWdhdGV3YXkuY29tIiwiaWF0IjoxNjAzMDI2MjU0LCJleHAiOjE2MDMxMTI2NTQsImF6cCI6InFPWDN5ajZOVmV3ZjE3QjhHMkw4ZFhpTFkwUTlQMnZjIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIn0.ymJ5OKKvCRrXzf_xhZf0bfc_aB0wmZ1CfiQp3PfYSLX5WFOby47MiapFCJFC3h1RH8owg2PIP_GKfox7R_wk-5kdtVl9dVLCCzXbCyL3tdUO4LkDGypu8MhtxMiZxOAhJDCjMGq2CS50BSI9b9yHyFQ7IKIhrsaElJ5GC5Ul2kTy3LiLh3QiVSWJkJfxchTPlAKn8RSen64pUqWZde0kBTle01h8gfEkdGSruLZ4973u-pJ9zpCoo5d10Vnlc7dq8U32ysT-_BLmiHL7ITjdKLbg4oninsgSJFkB10Wl6uskgT9lIwROfnobYQD5_RKfT26sD8Nw1lmtsbsP0u2vDQ"
-  },
-  "post": {
-    "title": "Test Title",
-    "content": "This is the content of the blog post"
+  "body": "{ \"title\": \"new post\", \"content\": \"this is a new post!\" }",
+  "requestContext": {
+    "authorizer": {
+      "principalId": "qOX3yj6NVewf17B8G2L8dXiLY0Q9P2vc@clients"
+    }
   }
 }

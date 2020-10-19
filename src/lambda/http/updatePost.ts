@@ -1,6 +1,6 @@
 import { lambdaHandler } from '../../libs/lambdaHandler_lib';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
-import { createPost } from '../../businessLogic/posts';
+import { updatePost } from '../../businessLogic/posts';
 import { iPost } from '../../types/iPost';
 
 export const handler: APIGatewayProxyHandler = lambdaHandler(
@@ -9,6 +9,6 @@ export const handler: APIGatewayProxyHandler = lambdaHandler(
     const postData = JSON.parse(event.body);
     const userId = event.requestContext.authorizer.principalId;
 
-    return await createPost({ ...postData, userId });
+    return await updatePost({ ...postData, userId });
   }
 );

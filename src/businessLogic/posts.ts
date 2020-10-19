@@ -1,6 +1,6 @@
-// import { getUserId } from './../utils';
 import * as uuid from 'uuid';
 import { iCreatePostRequest } from '../types/requestTypes/iCreatePostRequest';
+import { iUpdatePostRequest } from '../types/requestTypes/iUpdatePostRequest';
 import { iGetPostRequest } from '../types/requestTypes/iGetPostRequest';
 import { iPost } from '../types/iPost';
 import { PostsAccess } from '../dataLayer/postsAccess';
@@ -8,18 +8,13 @@ import { PostsAccess } from '../dataLayer/postsAccess';
 const postsAccess = new PostsAccess();
 
 export const createPost = async (
-  createPostRequest: iCreatePostRequest,
-  userId: string
+  createPostRequest: iCreatePostRequest
 ): Promise<iPost> => {
   const postId: string = uuid.v4();
-  // const userId: string = getUserId(auth);
 
   return await postsAccess.createPost({
-    userId,
     postId,
-    title: createPostRequest.title,
-    content: createPostRequest.content,
-    coverUrl: createPostRequest.coverUrl,
+    ...createPostRequest,
     createdAt: new Date().toISOString(),
   });
 };
@@ -31,4 +26,14 @@ export const getPost = async (
     getPostRequest.postId,
     getPostRequest.userId
   );
+};
+
+export const getPosts = async (userId: string): Promise<iPost[]> => {
+  return await postsAccess.getPosts(userId);
+};
+
+export const updatePost = async (
+  updatePostRequest: iUpdatePostRequest
+): Promise<iPost> => {
+  return await postsAccess.updatePost({ ...updatePostRequest });
 };

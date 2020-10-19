@@ -1,0 +1,8 @@
+{
+  "body": "{ \"postId\": \"0d6e5038-e5af-44a3-8a72-f82f5e346bd4\", \"userId\": \"qOX3yj6NVewf17B8G2L8dXiLY0Q9P2vc@clients\", \"title\": \"update post\", \"content\": \"update content\", \"coverUrl\": \"xyz123\" }",
+  "requestContext": {
+    "authorizer": {
+      "principalId": "qOX3yj6NVewf17B8G2L8dXiLY0Q9P2vc@clients"
+    }
+  }
+}

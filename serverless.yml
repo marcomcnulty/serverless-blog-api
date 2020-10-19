@@ -79,6 +79,49 @@ functions:
           - logs:PutLogEvents
         Resource:
           - '*'
+  GetPosts:
+    handler: src/lambda/http/getPosts.handler
+    events:
+      - http:
+          path: /posts/{userId}
+          method: get
+          cors: true
+          authorizer: Auth
+    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-get-post-role-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}
+      - Effect: Allow
+        Action:
+          - logs:CreateLogGroup
+          - logs:CreateLogStream
+          - logs:PutLogEvents
+        Resource:
+          - '*'
+
+  UpdatePost:
+    handler: src/lambda/http/updatePost.handler
+    events:
+      - http:
+          path: /posts/{userId}/{postId}
+          method: put
+          cors: true
+          authorizer: Auth
+    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-get-post-role-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}
+      - Effect: Allow
+        Action:
+          - logs:CreateLogGroup
+          - logs:CreateLogStream
+          - logs:PutLogEvents
+        Resource:
+          - '*'
 
 custom:
   serverless-offline:
