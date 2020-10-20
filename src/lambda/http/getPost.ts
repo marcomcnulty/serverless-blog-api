@@ -7,8 +7,7 @@ export const handler: APIGatewayProxyHandler = lambdaHandler(
   async (event: APIGatewayProxyEvent, context): Promise<iPost> => {
     console.log('Processing get post event!');
 
-    const postId = event.pathParameters.postId;
-    const userId = event.pathParameters.userId;
+    const { userId, postId } = event.pathParameters;
 
     return await getPost({ userId, postId });
   }

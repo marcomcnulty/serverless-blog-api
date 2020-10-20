@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "integrationTest": "env TEST_MODE=handler POSTS_TABLE=dev-posts ./node_modules/.bin/mocha -r ts-node/register src/tests/testCases/*.test.ts --timeout 10000 --retries 3",
-    "acceptanceTest": "env TEST_MODE=http TEST_ROOT=https://5bcmh6feef.execute-api.eu-west-2.amazonaws.com/dev ./node_modules/.bin/mocha -r ts-node/register src/tests/testCases/*.test.ts --timeout 10000 --retries 3"
+    "integrationTest": "env TEST_MODE=handler POSTS_TABLE=dev-posts ./node_modules/.bin/mocha -r ts-node/register src/tests/testCases/*.test.ts --timeout 10000 --retries 1",
+    "acceptanceTest": "env TEST_MODE=http TEST_ROOT=https://yxmqk71mbf.execute-api.eu-west-2.amazonaws.com/dev ./node_modules/.bin/mocha -r ts-node/register src/tests/testCases/*.test.ts --timeout 10000 --retries 1"
   },
   "repository": {
     "type": "git",

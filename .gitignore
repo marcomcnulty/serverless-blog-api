@@ -9,3 +9,6 @@ jspm_packages
 .env
 
 .webpack
+
+# error reports
+report.*

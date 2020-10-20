@@ -32,7 +32,9 @@ export const getPosts = async (userId: string): Promise<iPost[]> => {
 export const updatePost = async (
   updatePostRequest: iUpdatePostRequest
 ): Promise<iPost> => {
-  return await postsAccess.updatePost({ ...updatePostRequest });
+  const res = await postsAccess.updatePost(updatePostRequest);
+
+  return res;
 };
 
 // TODO: type for deletePostRequest... how to merge GetPostRequest??

@@ -1,6 +1,7 @@
 import axios from 'Axios';
 import * as uuid from 'uuid';
 import * as dotenv from 'dotenv';
+import { when } from './when';
 
 // load environment variables
 dotenv.config();
@@ -20,6 +21,7 @@ const anAuthenticatedUser = async () => {
     const { data } = await axios.post(`${baseUrl}oauth/token`, reqOpts);
 
     return {
+      // hard-coded so it can easily be used elsewhere
       userId: uuid.v4(),
       token: data.access_token,
     };
@@ -28,6 +30,30 @@ const anAuthenticatedUser = async () => {
   }
 };
 
+const aBlogPost = async user => {
+  return await when.weInvokeCreatePost(user, {
+    title: 'Test Title',
+    content: 'This is the content of the blog post',
+  });
+};
+
+const multipleBlogPosts = async user => {
+  const postsArr = [];
+
+  for (let i = 0; i < 3; i++) {
+    const res = await when.weInvokeCreatePost(user, {
+      title: `Blog post ${i + 1}`,
+      content: `This is the content of blog post ${i + 1}`,
+    });
+
+    postsArr.push(JSON.parse(res.body));
+  }
+
+  return postsArr;
+};
+
 export const given = {
   anAuthenticatedUser,
+  aBlogPost,
+  multipleBlogPosts,
 };

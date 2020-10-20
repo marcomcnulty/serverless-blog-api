@@ -12,7 +12,6 @@ export class PostsAccess {
     const params = {
       TableName: this.postsTable,
       Item: post,
-      ReturnValues: 'ALL_NEW',
     };
 
     await dynamoDb.put(params);
@@ -20,12 +19,12 @@ export class PostsAccess {
     return params.Item as iPost;
   }
 
-  async getPost(getPostRequest: iGetPostRequest): Promise<iPost> {
+  async getPost({ userId, postId }): Promise<iPost> {
     const params = {
       TableName: this.postsTable,
       Key: {
-        userId: getPostRequest.userId,
-        postId: getPostRequest.postId,
+        userId,
+        postId,
       },
     };
 
@@ -70,12 +69,12 @@ export class PostsAccess {
     return res.Attributes as iPost;
   }
 
-  async deletePost(deletePostRequest): Promise<any> {
+  async deletePost({ userId, postId }): Promise<any> {
     const params = {
       TableName: this.postsTable,
       Key: {
-        userId: deletePostRequest.userId,
-        postId: deletePostRequest.postId,
+        userId,
+        postId,
       },
     };
 

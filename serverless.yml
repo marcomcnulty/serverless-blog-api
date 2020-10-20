@@ -65,7 +65,6 @@ functions:
           path: /posts/{userId}/{postId}
           method: get
           cors: true
-          authorizer: Auth
     iamRoleStatementsName: ${self:provider.environment.APP_NAME}-get-post-role-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
@@ -86,12 +85,11 @@ functions:
           path: /posts/{userId}
           method: get
           cors: true
-          authorizer: Auth
-    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-get-post-role-${self:provider.stage}
+    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-get-posts-role-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - dynamodb:GetItem
+          - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}
       - Effect: Allow
         Action:
@@ -109,7 +107,7 @@ functions:
           method: put
           cors: true
           authorizer: Auth
-    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-get-post-role-${self:provider.stage}
+    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-update-post-role-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -131,7 +129,7 @@ functions:
           method: delete
           cors: true
           authorizer: Auth
-    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-get-post-role-${self:provider.stage}
+    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-delete-post-role-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -146,6 +144,10 @@ functions:
           - '*'
 
 custom:
+  webpack:
+    webpackIncludeModules:
+      forceExclude:
+        - aws-sdk
   serverless-offline:
     port: 3003
   dynamodb:
