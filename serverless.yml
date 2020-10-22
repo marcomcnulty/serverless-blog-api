@@ -8,6 +8,8 @@ plugins:
   # local testing
   - serverless-offline
   - serverless-dynamodb-local
+  # enable tracing
+  - serverless-plugin-tracing
 
 # referring to functions - gives more control for optimised deployments
 package:
@@ -21,6 +23,11 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-west-2'}
   profile: serverless-marco
+  tracing:
+    lambda: true
+    apiGateway: true
+  # overcome issue with basic execution role not being assigned when
+  # specifying iam policies on per-function-level
   iamManagedPolicies:
     - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
 
@@ -28,6 +35,8 @@ provider:
     APP_NAME: udacity-serverless-blog
     POSTS_TABLE: ${self:provider.stage}-posts
     PROFILES_TABLE: ${self:provider.stage}-profiles
+    FILES_S3_BUCKET: ${self:provider.stage}-serverless-blog-files
+    SIGNED_URL_EXPIRATION: 300
 
 functions:
   Auth:
@@ -57,6 +66,12 @@ functions:
           - logs:PutLogEvents
         Resource:
           - '*'
+      - Effect: 'Allow'
+        Action:
+          - 'xray:PutTraceSegments'
+          - 'xray:PutTelemetryRecords'
+        Resource:
+          - '*'
 
   GetPost:
     handler: src/lambda/http/getPost.handler
@@ -78,6 +93,12 @@ functions:
           - logs:PutLogEvents
         Resource:
           - '*'
+      - Effect: 'Allow'
+        Action:
+          - 'xray:PutTraceSegments'
+          - 'xray:PutTelemetryRecords'
+        Resource:
+          - '*'
   GetPosts:
     handler: src/lambda/http/getPosts.handler
     events:
@@ -96,6 +117,12 @@ functions:
           - logs:CreateLogGroup
           - logs:CreateLogStream
           - logs:PutLogEvents
+        Resource:
+          - '*'
+      - Effect: 'Allow'
+        Action:
+          - 'xray:PutTraceSegments'
+          - 'xray:PutTelemetryRecords'
         Resource:
           - '*'
 
@@ -120,6 +147,12 @@ functions:
           - logs:PutLogEvents
         Resource:
           - '*'
+      - Effect: 'Allow'
+        Action:
+          - 'xray:PutTraceSegments'
+          - 'xray:PutTelemetryRecords'
+        Resource:
+          - '*'
 
   DeletePost:
     handler: src/lambda/http/deletePost.handler
@@ -142,12 +175,52 @@ functions:
           - logs:PutLogEvents
         Resource:
           - '*'
+      - Effect: 'Allow'
+        Action:
+          - 'xray:PutTraceSegments'
+          - 'xray:PutTelemetryRecords'
+        Resource:
+          - '*'
+
+  GenerateUploadUrl:
+    handler: src/lambda/http/generateUploadUrl.handler
+    events:
+      - http:
+          path: /posts/{userId}/{postId}/attachment
+          method: post
+          cors: true
+          authorizer: Auth
+    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-post-attachment-role-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - s3:PutObject
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.FILES_S3_BUCKET}/*
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+          - dynamodb:PutItem
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}
+      - Effect: Allow
+        Action:
+          - logs:CreateLogGroup
+          - logs:CreateLogStream
+          - logs:PutLogEvents
+        Resource:
+          - '*'
+      - Effect: 'Allow'
+        Action:
+          - 'xray:PutTraceSegments'
+          - 'xray:PutTelemetryRecords'
+        Resource:
+          - '*'
 
 custom:
-  webpack:
-    webpackIncludeModules:
-      forceExclude:
-        - aws-sdk
+  webpackIncludeModules:
+    forceExclude:
+      - aws-sdk
   serverless-offline:
     port: 3003
   dynamodb:

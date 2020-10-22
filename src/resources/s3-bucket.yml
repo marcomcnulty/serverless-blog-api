@@ -1,7 +1,8 @@
 Resources:
-  AttachmentsBucket:
+  FilesS3BUCKET:
     Type: AWS::S3::Bucket
     Properties:
+      BucketName: ${self:provider.environment.FILES_S3_BUCKET}
       # set CORS policy
       CorsConfiguration:
         CorsRules:
@@ -17,8 +18,18 @@ Resources:
               - HEAD
             MaxAge: 3000
 
-# print out the name of the bucket that is created
-Outputs:
-  AttachmentsBucketName:
-    Value:
-      Ref: AttachmentsBucket
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      PolicyDocument:
+        Id: Policy
+        Version: '2012-10-17'
+        Statement:
+          - Sid: PublicReadWriteBucketPolicy
+            Effect: Allow
+            Principal: '*'
+            Action:
+              - s3:GetObject
+              - s3:PutObject
+            Resource: arn:aws:s3:::${self:provider.environment.FILES_S3_BUCKET}/*
+      Bucket: !Ref FilesS3BUCKET

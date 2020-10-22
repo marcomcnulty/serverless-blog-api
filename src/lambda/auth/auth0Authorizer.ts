@@ -6,6 +6,9 @@ import { verify, decode } from 'jsonwebtoken';
 import axios from 'Axios';
 import { iJwt } from '../../types/jwtTypes/iJwt';
 import { iJwtPayload } from '../../types/jwtTypes/iJwtPayload';
+import { createLogger } from '../../utils';
+
+const logger = createLogger('auth');
 
 // endpoint for JWK used to sign JWT for this tenant
 const jwksUrl = 'https://dev-f8ud0irk.eu.auth0.com/.well-known/jwks.json';
@@ -13,7 +16,7 @@ const jwksUrl = 'https://dev-f8ud0irk.eu.auth0.com/.well-known/jwks.json';
 export const handler = async (
   event: APIGatewayTokenAuthorizerEvent
 ): Promise<APIGatewayAuthorizerResult> => {
-  console.log(`Processing Auth Event: ${JSON.stringify(event)}`);
+  logger.info(`Processing Auth Event: ${JSON.stringify(event)}`);
 
   try {
     const jwtPayload: iJwtPayload = await verifyToken(event.authorizationToken);
@@ -33,7 +36,7 @@ export const handler = async (
       },
     };
   } catch (err) {
-    console.log(`User not authorised! Error: ${err.message}`);
+    logger.error('User not authorised!', { error: err.message });
 
     return {
       // arbitrary value
@@ -84,13 +87,15 @@ async function verifyToken(authHeader: string): Promise<iJwtPayload> {
 
 function getToken(authHeader: string): string {
   if (!authHeader) {
+    logger.error('No authentication header');
     throw new Error('No authentication header');
   }
 
   if (!authHeader.toLowerCase().startsWith('bearer ')) {
+    logger.error('Invalid authentication header');
     throw new Error('Invalid authentication header');
   }
-  console.log('Authentication Header is valid!');
+  logger.info('Authentication Header is valid!');
 
   // separates the token from 'Bearer'
   return authHeader.split(' ')[1];
@@ -119,9 +124,10 @@ function getPublicKey(jwks: any, jwt: iJwt) {
   const signingKey = keys.find(key => key.kid === jwt.header.kid);
 
   if (!signingKey) {
+    logger.error('No signing keys found');
     throw new Error('No signing key found');
   }
-  console.log('Signing key found! ', signingKey);
+  logger.info('Signing keys created successfully ', signingKey);
 
   return signingKey.pem;
 }

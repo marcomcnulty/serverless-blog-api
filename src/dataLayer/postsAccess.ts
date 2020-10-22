@@ -1,11 +1,14 @@
 import dynamoDb from '../libs/dynamodb_lib';
+import * as AWS from 'aws-sdk';
 import { iPost } from './../types/iPost';
 import { iCreatePostRequest } from '../types/requestTypes/iCreatePostRequest';
-import { iGetPostRequest } from './../types/requestTypes/iGetPostRequest';
 import { iUpdatePostRequest } from '../types/requestTypes/iUpdatePostRequest';
 
 export class PostsAccess {
-  constructor(private readonly postsTable = process.env.POSTS_TABLE) {}
+  constructor(
+    private readonly postsTable = process.env.POSTS_TABLE,
+    private readonly bucketName = process.env.FILES_S3_BUCKET
+  ) {}
 
   // don't need to return db item just postReq properties for testing
   async createPost(post: iCreatePostRequest): Promise<iPost> {
@@ -81,5 +84,38 @@ export class PostsAccess {
     await dynamoDb.delete(params);
 
     return { status: true };
+  }
+
+  async generateUploadUrl(postId: string): Promise<string> {
+    const s3 = new AWS.S3({
+      signatureVersion: 'v4',
+    });
+
+    return s3.getSignedUrl('putObject', {
+      Bucket: process.env.FILES_S3_BUCKET,
+      Key: postId,
+      Expires: parseInt(process.env.SIGNED_URL_EXPIRATION),
+    });
+  }
+
+  async setCoverUrl(postId: string, userId: string): Promise<boolean> {
+    const coverUrl: string = `https://${this.bucketName}.s3.amazonaws.com/${postId}`;
+
+    await dynamoDb.update({
+      TableName: this.postsTable,
+      Key: {
+        postId,
+        userId,
+      },
+      UpdateExpression: 'set #coverUrl = :coverUrl',
+      ExpressionAttributeNames: {
+        '#coverUrl': 'coverUrl',
+      },
+      ExpressionAttributeValues: {
+        ':coverUrl': coverUrl,
+      },
+    });
+
+    return true;
   }
 }

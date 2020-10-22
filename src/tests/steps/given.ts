@@ -21,7 +21,6 @@ const anAuthenticatedUser = async () => {
     const { data } = await axios.post(`${baseUrl}oauth/token`, reqOpts);
 
     return {
-      // hard-coded so it can easily be used elsewhere
       userId: uuid.v4(),
       token: data.access_token,
     };

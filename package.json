@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "integrationTest": "env TEST_MODE=handler POSTS_TABLE=dev-posts ./node_modules/.bin/mocha -r ts-node/register src/tests/testCases/*.test.ts --timeout 10000 --retries 1",
-    "acceptanceTest": "env TEST_MODE=http TEST_ROOT=https://yxmqk71mbf.execute-api.eu-west-2.amazonaws.com/dev ./node_modules/.bin/mocha -r ts-node/register src/tests/testCases/*.test.ts --timeout 10000 --retries 1"
+    "acceptanceTest": "env TEST_MODE=http TEST_ROOT=https://gmesgdhu5g.execute-api.eu-west-2.amazonaws.com/dev ./node_modules/.bin/mocha -r ts-node/register src/tests/testCases/*.test.ts --timeout 10000 --retries 1"
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,7 @@
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-iam-roles-per-function": "^2.0.2",
     "serverless-offline": "^6.8.0",
+    "serverless-plugin-tracing": "^2.0.0",
     "serverless-webpack": "^5.3.5",
     "ts-loader": "^8.0.4",
     "ts-node": "^9.0.0",
@@ -43,9 +44,11 @@
     "webpack": "^5.0.0"
   },
   "dependencies": {
+    "aws-xray-sdk": "^3.2.0",
     "axios": "^0.20.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
-    "uuid": "^8.3.1"
+    "uuid": "^8.3.1",
+    "winston": "^3.3.3"
   }
 }

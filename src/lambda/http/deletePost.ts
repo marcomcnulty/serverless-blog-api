@@ -1,10 +1,13 @@
 import { lambdaHandler } from '../../libs/lambdaHandler_lib';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 import { deletePost } from '../../businessLogic/posts';
+import { createLogger } from '../../utils';
+
+const logger = createLogger('deletePost');
 
 export const handler: APIGatewayProxyHandler = lambdaHandler(
   async (event: APIGatewayProxyEvent, context): Promise<boolean> => {
-    console.log('Processing delete post event!');
+    logger.info('Processing delete post event!');
 
     const postId = event.pathParameters.postId;
     const userId = event.pathParameters.userId;

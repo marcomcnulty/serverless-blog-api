@@ -41,3 +41,14 @@ export const updatePost = async (
 export const deletePost = async (deletePostRequest): Promise<boolean> => {
   return await postsAccess.deletePost({ ...deletePostRequest });
 };
+
+export async function generateUploadUrl(postId: string): Promise<string> {
+  return await postsAccess.generateUploadUrl(postId);
+}
+
+export async function setCoverUrl(
+  userId: string,
+  postId: string
+): Promise<boolean> {
+  return await postsAccess.setCoverUrl(postId, userId);
+}

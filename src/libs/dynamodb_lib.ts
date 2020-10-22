@@ -1,6 +1,20 @@
 import * as AWS from 'aws-sdk';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
-const client = new AWS.DynamoDB.DocumentClient();
+const AWSXRAY = require('aws-xray-sdk');
+const XAWS = AWSXRAY.captureAWS(AWS);
+
+let client: DocumentClient;
+
+if (process.env.IS_OFFLINE) {
+  console.log('Creating a local DynamoDB instance');
+  client = new XAWS.DynamoDB.DocumentClient({
+    region: 'localhost',
+    endpoint: 'http://localhost:8000',
+  });
+} else {
+  client = new XAWS.DynamoDB.DocumentClient();
+}
 
 export default {
   get: params => client.get(params).promise(),
