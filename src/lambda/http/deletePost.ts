@@ -10,7 +10,7 @@ export const handler: APIGatewayProxyHandler = lambdaHandler(
     logger.info('Processing delete post event!');
 
     const postId = event.pathParameters.postId;
-    const userId = event.pathParameters.userId;
+    const userId = event.requestContext.authorizer.principalId;
 
     return await deletePost({ userId, postId });
   }

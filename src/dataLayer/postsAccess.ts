@@ -10,7 +10,7 @@ export class PostsAccess {
     private readonly bucketName = process.env.FILES_S3_BUCKET
   ) {}
 
-  // don't need to return db item just postReq properties for testing
+  // don't need to return db item just postReq properties for tests
   async createPost(post: iCreatePostRequest): Promise<iPost> {
     const params = {
       TableName: this.postsTable,
@@ -34,6 +34,20 @@ export class PostsAccess {
     const res = await dynamoDb.get(params);
 
     return res.Item as iPost;
+  }
+
+  async isAuthorized(userId, postId): Promise<boolean> {
+    const params = {
+      TableName: this.postsTable,
+      Key: {
+        userId,
+        postId,
+      },
+    };
+
+    const res = await dynamoDb.get(params);
+
+    return !!res.Item;
   }
 
   async getPosts(userId: string): Promise<iPost[]> {

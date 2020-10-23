@@ -1,0 +1,167 @@
+{
+  "info": {
+    "_postman_id": "affc8b66-a45c-4ed6-94ae-9d3ab34e862b",
+    "name": "Serverless Capstone",
+    "description": "Test serverless API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get all posts",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://{{apiId}}.execute-api.eu-west-2.amazonaws.com/dev/posts/{{userId}}",
+          "protocol": "https",
+          "host": ["{{apiId}}", "execute-api", "eu-west-2", "amazonaws", "com"],
+          "path": ["dev", "posts", "{{userId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get post",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://{{apiId}}.execute-api.eu-west-2.amazonaws.com/dev/posts/{{userId}}/{{postId}}",
+          "protocol": "https",
+          "host": ["{{apiId}}", "execute-api", "eu-west-2", "amazonaws", "com"],
+          "path": ["dev", "posts", "{{userId}}", "{{postId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create post",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"title\": \"New post title\",\n\t\"content\": \"New post content\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{apiId}}.execute-api.eu-west-2.amazonaws.com/dev/posts",
+          "protocol": "https",
+          "host": ["{{apiId}}", "execute-api", "eu-west-2", "amazonaws", "com"],
+          "path": ["dev", "posts"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update post",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"title\": \"This is the updated title\",\n\t\"content\": \"This is the updated content\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{apiId}}.execute-api.eu-west-2.amazonaws.com/dev/posts/{{userId}}/{{postId}}",
+          "protocol": "https",
+          "host": ["{{apiId}}", "execute-api", "eu-west-2", "amazonaws", "com"],
+          "path": ["dev", "posts", "{{userId}}", "{{postId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete post",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://{{apiId}}.execute-api.eu-west-2.amazonaws.com/dev/posts/{{userId}}/{{postId}}",
+          "protocol": "https",
+          "host": ["{{apiId}}", "execute-api", "eu-west-2", "amazonaws", "com"],
+          "path": ["dev", "posts", "{{userId}}", "{{postId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Generate Upload URL",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "https://{{apiId}}.execute-api.eu-west-2.amazonaws.com/dev/posts/{{userId}}/{{postId}}/attachment",
+          "protocol": "https",
+          "host": ["{{apiId}}", "execute-api", "eu-west-2", "amazonaws", "com"],
+          "path": ["dev", "posts", "{{userId}}", "{{postId}}", "attachment"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "16b4bff5-d9b7-478b-be26-9576a25f2191",
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "594bc7c4-fb70-4b3b-a288-6ce890501a9c",
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "id": "ae6a260f-cfdb-4b74-9ef9-5b87cbcae205",
+      "key": "apiId",
+      "value": "gmesgdhu5g",
+      "type": "string"
+    },
+    {
+      "id": "8b8e26ec-9893-4a6c-81b2-c623dca37710",
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "3f96f447-bbfc-49c1-9055-17ffcd0b6654",
+      "key": "userId",
+      "value": "qOX3yj6NVewf17B8G2L8dXiLY0Q9P2vc@clients",
+      "type": "string"
+    },
+    {
+      "id": "21aae444-e06b-4ee0-9471-ff798b744dab",
+      "key": "postId",
+      "value": "ada77581-3173-41a9-978f-f9caf26a75ac",
+      "type": "string"
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

@@ -4,7 +4,11 @@ import { iUpdatePostRequest } from '../types/requestTypes/iUpdatePostRequest';
 import { iGetPostRequest } from '../types/requestTypes/iGetPostRequest';
 import { iPost } from '../types/iPost';
 import { PostsAccess } from '../dataLayer/postsAccess';
+import { createLogger } from '../utils';
 
+const logger = createLogger('BusinessLogic');
+
+// instantiate the posts DB layer
 const postsAccess = new PostsAccess();
 
 export const createPost = async (
@@ -32,23 +36,48 @@ export const getPosts = async (userId: string): Promise<iPost[]> => {
 export const updatePost = async (
   updatePostRequest: iUpdatePostRequest
 ): Promise<iPost> => {
-  const res = await postsAccess.updatePost(updatePostRequest);
+  const { userId, postId } = updatePostRequest;
+  const checkAuth = await isAuthorized(userId, postId);
 
-  return res;
+  if (!checkAuth) {
+    logger.error('Failed to update post, no post with matching userId/postId!');
+    throw new Error('Invalid request - no post with matching userId/postId');
+  }
+
+  return await postsAccess.updatePost(updatePostRequest);
 };
 
-// TODO: type for deletePostRequest... how to merge GetPostRequest??
+// TODO: type for deletePostRequest... how to merge GetPostRequest interface??
 export const deletePost = async (deletePostRequest): Promise<boolean> => {
+  const { userId, postId } = deletePostRequest;
+  const checkAuth = await isAuthorized(userId, postId);
+
+  if (!checkAuth) {
+    logger.error('Failed to delete post, no post with matching userId/postId!');
+    throw new Error('Invalid request - no post with matching userId/postId');
+  }
+
   return await postsAccess.deletePost({ ...deletePostRequest });
 };
 
+// returns an aws signed url for direct upload to S3 bucket
 export async function generateUploadUrl(postId: string): Promise<string> {
   return await postsAccess.generateUploadUrl(postId);
 }
 
+// updates the post with the image url
 export async function setCoverUrl(
   userId: string,
   postId: string
 ): Promise<boolean> {
   return await postsAccess.setCoverUrl(postId, userId);
 }
+
+// checks whether a post with supplied userId/postId exists - prevents a user
+// from updating/deleting a post belonging to another user.
+export const isAuthorized = async (
+  userId: string,
+  postId: string
+): Promise<boolean> => {
+  return await postsAccess.isAuthorized(userId, postId);
+};

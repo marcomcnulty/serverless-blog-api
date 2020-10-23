@@ -12,18 +12,6 @@ export const getUserId = (auth): string => {
   return parseUserId(jwtString);
 };
 
-export const handleInvalidPostRequest = () => {
-  return {
-    statusCode: 404,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify({
-      error: 'That post does not exist',
-    }),
-  };
-};
-
 export const createLogger = (loggerName: string) => {
   return winston.createLogger({
     level: 'info',
